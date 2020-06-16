@@ -99,9 +99,7 @@
                      return function() {
                          infowindow.close();
                      };
-                 }
-                 
-                 
+                 }  
                    
                 }
             });
