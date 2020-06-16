@@ -33,14 +33,9 @@
                   latitudeArr.push(latitude);
                   longitudeArr.push(longitude);
                   
-                      //var info =  "이름: "+name +"<br/>"+
-                               //"위도: "+lat+"<br/>"+
-                               //"경도: "+lon+ "<br/>"+"<br/>";
-                               
-                      //$('#sel').append(info);
+                  
                    });
-                   //각 배열에 다 들어가있는 상황! 
-                   //이제 지도를 보여줄 차례!
+                 
                    var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
                   mapOption = {
                       center: new kakao.maps.LatLng(37.56682, 126.97864), // 지도의 중심좌표
@@ -69,11 +64,20 @@
                          //latlng: new kakao.maps.LatLng(33.451393, 126.570738)
                   
                  for (var i = 0; i < latitudeArr.length; i ++) {
-                     // 마커를 생성합니다
-                     var marker = new kakao.maps.Marker({
-                         map: map, // 마커를 표시할 지도
-                         position: new kakao.maps.LatLng(latitudeArr[i], longitudeArr[i]) // 마커의 위치
-                     });
+                	 var imageSrc = '../img/hospital.png', // 마커이미지의 주소입니다    
+						imageSize = new kakao.maps.Size(20, 20), // 마커이미지의 크기입니다
+						imageOption = {
+							offset : new kakao.maps.Point(27, 69)
+						}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+						var markerImage = new kakao.maps.MarkerImage(
+								imageSrc, imageSize, imageOption), markerPosition = new kakao.maps.LatLng(
+								latitudeArr[i], longitudeArr[i]); // 마커의 위치
+						// 마커를 생성합니다
+						var marker = new kakao.maps.Marker({
+							map : map, // 마커를 표시할 지도
+							position : markerPosition,
+							image : markerImage
+						});
 
                      // 마커에 표시할 인포윈도우를 생성합니다 
                      var infowindow = new kakao.maps.InfoWindow({
