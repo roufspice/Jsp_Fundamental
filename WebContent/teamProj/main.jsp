@@ -50,6 +50,23 @@
 
                  // ì§ëë¥¼ ìì±íë¤ 
                  var map = new kakao.maps.Map(mapContainer, mapOption); 
+                 
+              // 지도가 이동, 확대, 축소로 인해 중심좌표가 변경되면 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록합니다
+                 kakao.maps.event.addListener(map, 'center_changed', function() {
+
+                     // 지도의  레벨을 얻어옵니다
+                     var level = map.getLevel();
+
+                     // 지도의 중심좌표를 얻어옵니다 
+                     var latlng = map.getCenter(); 
+
+                     var message = '<p>지도 레벨은 ' + level + ' 이고</p>';
+                     message += '<p>중심 좌표는 위도 ' + latlng.getLat() + ', 경도 ' + latlng.getLng() + '입니다</p>';
+
+                     var resultDiv = document.getElementById('result');
+                    
+
+                 });
 
                  // ì§ë íì ë³ê²½ ì»¨í¸ë¡¤ì ìì±íë¤
                  var mapTypeControl = new kakao.maps.MapTypeControl();
@@ -102,10 +119,10 @@
 				  <ul class="pagination justify-content-center">
 				    <li class="page-item disabled">
 				    </li>
-		       <a class="page-link" href="main.jsp">Home</a>
-				    <li class="page-item"><a class="page-link" href="map/sampfire.jsp">fire</a></li>
-				    <li class="page-item"><a class="page-link" href="map/sampAED.jsp">AED</a></li>
-				    <li class="page-item"><a class="page-link" href="map/sampetc.jsp">etc</a></li>
+		   <button type="button" class="btn btn-outline-info" >Home</button>
+			<button type="button" class="btn btn-outline-danger" onclick="location='map/sampfire.jsp'">fire</button>
+			<button type="button" class="btn btn-outline-warning" onclick="location='map/sampAED.jsp'">AED</button>
+			<button type="button" class="btn btn-outline-success" onclick="location='map/sampetc.jsp'">etc</button>
 				    <li class="page-item">
 				    </li>
 				  </ul>

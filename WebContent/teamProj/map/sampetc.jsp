@@ -99,7 +99,9 @@
                      return function() {
                          infowindow.close();
                      };
-                 }  
+                 }
+                 
+                 
                    
                 }
             });
@@ -119,12 +121,11 @@
     				  <ul class="pagination justify-content-center">
     				    <li class="page-item disabled">
     				    </li>
-    		        <a class="page-link" href="../main.jsp">Home</a>
-    				    <li class="page-item"><a class="page-link" href="sampfire.jsp">fire</a></li>
-    				    <li class="page-item"><a class="page-link" href="sampAED.jsp">AED</a></li>
-    				    <li class="page-item"><a class="page-link" href="">etc</a></li>
-    				    <li class="page-item">
-    				    </li>
+    		       <button type="button" class="btn btn-outline-info" onclick="location='../main.jsp'">Home</button>
+			<button type="button" class="btn btn-outline-danger" onclick="location='sampfire.jsp'">fire</button>
+			<button type="button" class="btn btn-outline-warning" onclick="location='sampAED.jsp'">AED</button>
+			<button type="button" class="btn btn-outline-success" >etc</button>
+			<li class="page-item"></li>
     				  </ul>
     				</nav>
         <div id="map" style="width:100%;height:100vh;"></div>

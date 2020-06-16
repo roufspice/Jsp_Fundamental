@@ -51,6 +51,7 @@
 
                  // 지도를 생성한다 
                  var map = new kakao.maps.Map(mapContainer, mapOption); 
+                 
 
                  // 지도 타입 변경 컨트롤을 생성한다
                  var mapTypeControl = new kakao.maps.MapTypeControl();
@@ -101,13 +102,7 @@
                          infowindow.close();
                      };
                  }  
-                 
-              // markerCluster
-                 var clusterer = new kakao.maps.MarkerClusterer({
-                     map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
-                     averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
-                     minLevel: 10 // 클러스터 할 최소 지도 레벨 
-                 });
+             
                    
                 }
             });
@@ -127,11 +122,11 @@
 				  <ul class="pagination justify-content-center">
 				    <li class="page-item disabled">
 				    </li>
-		        <a class="page-link" href="../main.jsp">Home</a>
-				    <li class="page-item"><a class="page-link" href="">fire</a></li>
-				    <li class="page-item"><a class="page-link" href="sampAED.jsp">AED</a></li>
-				    <li class="page-item"><a class="page-link" href="sampetc.jsp">etc</a></li>
-				    <li class="page-item">
+		       <button type="button" class="btn btn-outline-info" onclick="location='../main.jsp'">Home</button>
+			<button type="button" class="btn btn-outline-danger" >fire</button>
+			<button type="button" class="btn btn-outline-warning" onclick="location='sampAED.jsp'">AED</button>
+			<button type="button" class="btn btn-outline-success" onclick="location='sampetc.jsp'">etc</button>
+			<li class="page-item"></li>
 				    </li>
 				  </ul>
 				</nav>
