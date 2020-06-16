@@ -21,28 +21,7 @@
                     }
                 });
 
-                /*
-                xhr.onreadystatechange = function(){
-                    if(xhr.readyState == 4 && xhr.status==200){
-                        console.log(typeof xhr.responseText);
-                        console.log(xhr.responseText);
-                        //문자열을 javascript 객체로 변환
-                        const obj = JSON.parse(xhr.responseText);
-                        const listArray = obj.cafelist;
-
-                        let message = "<ul>";
-
-                        for(let i=0;i<listArray.length;i++){
-                            const listObj = listArray[i];
-                            let name = listObj.name;
-                            let clubid = listObj.clubid;
-                            message += "<li>"+name+"("+clubid+")</li>";
-                        }
-                        message += "</ul>";
-                        $("#sel").append(message);
-                    }
-                }
-                */
+               
             });
             
         });
