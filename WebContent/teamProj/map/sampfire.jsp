@@ -1,10 +1,11 @@
-<!-- ajax_proxy.html -->
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Look for the FIRE STATION</title>
+<title>소방서 위치 지도</title>
 <script type="text/javascript" src="../js/jquery-3.5.1.js"></script>
 <script type="text/javascript"
    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=39c6c1c8b379d7eb9472eff045d57c1b"></script>
@@ -58,23 +59,17 @@
                      addrArr.push(addr);
                      telArr.push(tel);
 
-                     //var info =  "ì ´ë¦ : "+name +"<br/>"+
-                     //"ì  ë  : "+lat+"<br/>"+
-                     //"ê²½ë  : "+lon+ "<br/>"+"<br/>";
 
                      //$('#sel').append(info);
                   });
-                  //ê°  ë°°ì ´ì   ë ¤ ë ¤ì ´ê° ì  ë   ì  í ©! 
-                  //ì ´ì   ì§ ë  ë¥¼ ë³´ì ¬ì¤  ì°¨ë¡ !
-                  var mapContainer = document.getElementById('map'), // ì§ ë  ë¥¼ í  ì  í   div 
+
+                  var mapContainer = document.getElementById('map'),
                   mapOption = {
-                     center : new kakao.maps.LatLng(37.56682, 126.97864), // ì§ ë  ì   ì¤ ì ¬ì¢ í  
-                     level : 7, // ì§ ë  ì   í  ë   ë  ë²¨
+                     center : new kakao.maps.LatLng(37.56682, 126.97864),
+                     level : 7,
                      mapTypeId : kakao.maps.MapTypeId.ROADMAP
-                  // ì§ ë  ì¢ ë¥ 
                   };
 
-                  // ì§ ë  ë¥¼ ì  ì ±í  ë ¤ 
                   var map = new kakao.maps.Map(mapContainer, mapOption);
                   
                    if (navigator.geolocation) {
@@ -86,7 +81,7 @@
                                    lon = position.coords.longitude; // 경도
                                
                                var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
-                                   message = '<div style="padding:5px;">You are here!!</div>'; // 인포윈도우에 표시될 내용입니다
+                                   message = '<div style="padding:5px;">내 위치!</div>'; // 인포윈도우에 표시될 내용입니다
                                
                                // 마커와 인포윈도우를 표시합니다
                                displayMarker(locPosition, message);
@@ -128,38 +123,31 @@
                   
                   
 
-                  // ì§ ë   í  ì   ë³ ê²½ ì»¨í ¸ë¡¤ì   ì  ì ±í  ë ¤
                   var mapTypeControl = new kakao.maps.MapTypeControl();
 
-                  // ì§ ë  ì   ì  ë ¨ ì °ì¸¡ì   ì§ ë   í  ì   ë³ ê²½ ì»¨í ¸ë¡¤ì   ì¶ ê° í  ë ¤
                   map.addControl(mapTypeControl,
                         kakao.maps.ControlPosition.TOPRIGHT);
 
-                  // ì§ ë  ì   í  ë   ì¶ ì   ì»¨í ¸ë¡¤ì   ì  ì ±í  ë ¤
                   var zoomControl = new kakao.maps.ZoomControl();
 
-                  // ì§ ë  ì   ì °ì¸¡ì   í  ë   ì¶ ì   ì»¨í ¸ë¡¤ì   ì¶ ê° í  ë ¤
                   map.addControl(zoomControl,
                         kakao.maps.ControlPosition.RIGHT);
 
                   for (let i = 0; i < latitudeArr.length; i++) {
-                     var imageSrc = '../img/rescue119.png', // ë§ ì»¤ì ´ë¯¸ì§ ì   ì£¼ì  ì  ë  ë ¤    
-                     imageSize = new kakao.maps.Size(30, 30), // ë§ ì»¤ì ´ë¯¸ì§ ì   í ¬ê¸°ì  ë  ë ¤
+                     var imageSrc = '../img/rescue119.png',
+                     imageSize = new kakao.maps.Size(30, 30),
                      imageOption = {
                         offset : new kakao.maps.Point(15, 40)
-                     }; // ë§ ì»¤ì ´ë¯¸ì§ ì   ì µì  ì  ë  ë ¤. ë§ ì»¤ì   ì¢ í  ì   ì ¼ì¹ ì  í ¬ ì ´ë¯¸ì§  ì  ì  ì  ì   ì¢ í  ë¥¼ ì ¤ì  í ©ë  ë ¤.
+                     };
                      var markerImage = new kakao.maps.MarkerImage(
                            imageSrc, imageSize, imageOption), markerPosition = new kakao.maps.LatLng(
-                           latitudeArr[i], longitudeArr[i]); // ë§ ì»¤ì   ì  ì¹ 
-                     // ë§ ì»¤ë¥¼ ì  ì ±í ©ë  ë ¤
+                           latitudeArr[i], longitudeArr[i]);
                      var marker = new kakao.maps.Marker({
-                        map : map, // ë§ ì»¤ë¥¼ í  ì  í   ì§ ë  
+                        map : map,
                         position : markerPosition,
                         image : markerImage
-                     //
                      });
 
-                     // ë§ ì»¤ì   í  ì  í   ì ¸í ¬ì  ë  ì °ë¥¼ ì  ì ±í ©ë  ë ¤ 
                      var infowindow = new kakao.maps.InfoWindow(
                            {
                               content : '<div class="area">'   
@@ -178,36 +166,23 @@
 
                            });
 
-                     // ë§ ì»¤ì   mouseover ì ´ë²¤í ¸ì   mouseout ì ´ë²¤í ¸ë¥¼ ë ±ë¡ í ©ë  ë ¤
-                     // ì ´ë²¤í ¸ ë¦¬ì ¤ë  ë¡ ë   í ´ë¡ ì  ë¥¼ ë§ ë ¤ì ´ ë ±ë¡ í ©ë  ë ¤ 
-                     // forë¬¸ì  ì   í ´ë¡ ì  ë¥¼ ë§ ë ¤ì ´ ì£¼ì§  ì  ì ¼ë©´ ë§ ì§ ë§  ë§ ì»¤ì  ë§  ì ´ë²¤í ¸ê°  ë ±ë¡ ë ©ë  ë ¤
                      kakao.maps.event.addListener(marker, 'mouseover',
                            makeOverListener(map, marker, infowindow));
                      kakao.maps.event.addListener(marker, 'mouseout',
                            makeOutListener(infowindow));
                   }
 
-                  // ì ¸í ¬ì  ë  ì °ë¥¼ í  ì  í  ë   í ´ë¡ ì  ë¥¼ ë§ ë  ë   í ¨ì  ì  ë  ë ¤ 
                   function makeOverListener(map, marker, infowindow) {
                      return function() {
                         infowindow.open(map, marker);
                      };
                   }
 
-                  // ì ¸í ¬ì  ë  ì °ë¥¼ ë «ë   í ´ë¡ ì  ë¥¼ ë§ ë  ë   í ¨ì  ì  ë  ë ¤ 
                   function makeOutListener(infowindow) {
                      return function() {
                         infowindow.close();
                      };
                   }
-                  //정보 클릭 이벤트 발생!
-                  $(function(){
-                     
-                     for(let i =0; i<nameArr.length; i++){
-                        
-                     }
-                  
-                  });
 
                }
             });

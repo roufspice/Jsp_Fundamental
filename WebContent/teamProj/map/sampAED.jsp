@@ -1,6 +1,7 @@
-<!-- ajax_proxy.html -->
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +13,7 @@
    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
    crossorigin="anonymous">
 
-<title>Look for the AED</title>
+<title>AED위치</title>
 
 <style>
     body {
@@ -54,48 +55,39 @@
                   });
 
                   //Show the map!!
-                  var mapContainer = document.getElementById('map'), // ì§ ë  ë¥¼ í  ì  í   div 
+                  var mapContainer = document.getElementById('map'),
                   mapOption = {
-                     center : new kakao.maps.LatLng(37.56682, 126.97864), // ì§ ë  ì   ì¤ ì ¬ì¢ í  
-                     level : 7, // ì§ ë  ì   í  ë   ë  ë²¨
+                     center : new kakao.maps.LatLng(37.56682, 126.97864),
+                     level : 7,
                      mapTypeId : kakao.maps.MapTypeId.ROADMAP
-                  // ì§ ë  ì¢ ë¥ 
                   };
 
-                  // ì§ ë  ë¥¼ ì  ì ±í  ë ¤ 
                   var map = new kakao.maps.Map(mapContainer, mapOption);
                 
-                  // ì§ ë   í  ì   ë³ ê²½ ì»¨í ¸ë¡¤ì   ì  ì ±í  ë ¤
                   var mapTypeControl = new kakao.maps.MapTypeControl();
 
-                  // ì§ ë  ì   ì  ë ¨ ì °ì¸¡ì   ì§ ë   í  ì   ë³ ê²½ ì»¨í ¸ë¡¤ì   ì¶ ê° í  ë ¤
                   map.addControl(mapTypeControl,
                         kakao.maps.ControlPosition.TOPRIGHT);
 
-                  // ì§ ë  ì   í  ë   ì¶ ì   ì»¨í ¸ë¡¤ì   ì  ì ±í  ë ¤
                   var zoomControl = new kakao.maps.ZoomControl();
 
-                  // ì§ ë  ì   ì °ì¸¡ì   í  ë   ì¶ ì   ì»¨í ¸ë¡¤ì   ì¶ ê° í  ë ¤
                   map.addControl(zoomControl,
                         kakao.maps.ControlPosition.RIGHT);
                   
                   if (navigator.geolocation) {
                       
-                      // GeoLocationì   ì ´ì ©í ´ì   ì  ì   ì  ì¹ ë¥¼ ì »ì ´ì µë  ë ¤
                       navigator.geolocation.getCurrentPosition(function(position) {
                           
-                          var lat = position.coords.latitude, // ì  ë  
-                              lon = position.coords.longitude; // ê²½ë  
+                          var lat = position.coords.latitude,
+                              lon = position.coords.longitude;
                           
-                          var locPosition = new kakao.maps.LatLng(lat, lon), // ë§ ì»¤ê°  í  ì  ë   ì  ì¹ ë¥¼ geolocationì ¼ë¡  ì »ì ´ì ¨ ì¢ í  ë¡  ì  ì ±í ©ë  ë ¤
-                              message = '<div style="padding:5px;">You are here!!</div>'; // ì ¸í ¬ì  ë  ì °ì   í  ì  ë   ë ´ì ©ì  ë  ë ¤
-                          
-                          // ë§ ì»¤ì   ì ¸í ¬ì  ë  ì °ë¥¼ í  ì  í ©ë  ë ¤
-                          displayMarker(locPosition, message);
+                          var locPosition = new kakao.maps.LatLng(lat, lon),
+                              message = '<div style="padding:5px;">내 위치!</div>';
+                         displayMarker(locPosition, message);
                               
                         });
                       
-                  } else { // HTML5ì   GeoLocationì   ì ¬ì ©í   ì   ì  ì  ë   ë§ ì»¤ í  ì   ì  ì¹ ì   ì ¸í ¬ì  ë  ì ° ë ´ì ©ì   ì ¤ì  í ©ë  ë ¤
+                  } else {
                       
                       var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),    
                           message = 'It is not work T.T'
@@ -105,43 +97,37 @@
                   
                   function displayMarker(locPosition, message) {
 
-                      // ë§ ì»¤ë¥¼ ì  ì ±í ©ë  ë ¤
                       var marker = new kakao.maps.Marker({  
                           map: map, 
                           position: locPosition
                       }); 
                       
-                      var iwContent = message, // ì ¸í ¬ì  ë  ì °ì   í  ì  í   ë ´ì ©
+                      var iwContent = message,
                           iwRemoveable = true;
 
-                      // ì ¸í ¬ì  ë  ì °ë¥¼ ì  ì ±í ©ë  ë ¤
                       var infowindow = new kakao.maps.InfoWindow({
                           content : iwContent,
                           removable : iwRemoveable
                       });
                       
-                      // ì ¸í ¬ì  ë  ì °ë¥¼ ë§ ì»¤ì  ì   í  ì  í ©ë  ë ¤ 
                       infowindow.open(map, marker);
                       
-                      // ì§ ë   ì¤ ì ¬ì¢ í  ë¥¼ ì  ì  ì  ì¹ ë¡  ë³ ê²½í ©ë  ë ¤
                       map.setCenter(locPosition);      
                   }    
 
                   for (var i = 0; i < latitudeArr.length; i++) {
-                     var imageSrc = '../img/AED.png', // ë§ ì»¤ì ´ë¯¸ì§ ì   ì£¼ì  ì  ë  ë ¤    
-                     imageSize = new kakao.maps.Size(20, 20), // ë§ ì»¤ì ´ë¯¸ì§ ì   í ¬ê¸°ì  ë  ë ¤
+                     var imageSrc = '../img/AED.png',
+                     imageSize = new kakao.maps.Size(20, 20),
                      imageOption = {
                         offset : new kakao.maps.Point(27, 40)
-                     }; // ë§ ì»¤ì ´ë¯¸ì§ ì   ì µì  ì  ë  ë ¤. ë§ ì»¤ì   ì¢ í  ì   ì ¼ì¹ ì  í ¬ ì ´ë¯¸ì§  ì  ì  ì  ì   ì¢ í  ë¥¼ ì ¤ì  í ©ë  ë ¤.
+                     };
                      var markerImage = new kakao.maps.MarkerImage(
                            imageSrc, imageSize, imageOption), markerPosition = new kakao.maps.LatLng(
-                           latitudeArr[i], longitudeArr[i]); // ë§ ì»¤ì   ì  ì¹ 
-                     // ë§ ì»¤ë¥¼ ì  ì ±í ©ë  ë ¤
+                           latitudeArr[i], longitudeArr[i]);
                      var marker = new kakao.maps.Marker({
-                        map : map, // ë§ ì»¤ë¥¼ í  ì  í   ì§ ë  
+                        map : map,
                         position : markerPosition,
                         image : markerImage
-                     //
                      });
                      
                            
@@ -157,7 +143,6 @@
                         }
                         
                      }
-                     // ë§ ì»¤ì   í  ì  í   ì ¸í ¬ì  ë  ì °ë¥¼ ì  ì ±í ©ë  ë ¤ 
                      var infowindow = new kakao.maps.InfoWindow({
                         content : '<div class="area">'   
                                     + '<div class="info" style="font-weight: bolder;  text-align: center; background-color:#FACC2E;">'
@@ -184,23 +169,18 @@
                      
                      
                      
-                     // ë§ ì»¤ì   mouseover ì ´ë²¤í ¸ì   mouseout ì ´ë²¤í ¸ë¥¼ ë ±ë¡ í ©ë  ë ¤
-                     // ì ´ë²¤í ¸ ë¦¬ì ¤ë  ë¡ ë   í ´ë¡ ì  ë¥¼ ë§ ë ¤ì ´ ë ±ë¡ í ©ë  ë ¤ 
-                     // forë¬¸ì  ì   í ´ë¡ ì  ë¥¼ ë§ ë ¤ì ´ ì£¼ì§  ì  ì ¼ë©´ ë§ ì§ ë§  ë§ ì»¤ì  ë§  ì ´ë²¤í ¸ê°  ë ±ë¡ ë ©ë  ë ¤
                      kakao.maps.event.addListener(marker, 'mouseover',
                            makeOverListener(map, marker, infowindow));
                      kakao.maps.event.addListener(marker, 'mouseout',
                            makeOutListener(infowindow));
                   }
 
-                  // ì ¸í ¬ì  ë  ì °ë¥¼ í  ì  í  ë   í ´ë¡ ì  ë¥¼ ë§ ë  ë   í ¨ì  ì  ë  ë ¤ 
                   function makeOverListener(map, marker, infowindow) {
                      return function() {
                         infowindow.open(map, marker);
                      };
                   }
 
-                  // ì ¸í ¬ì  ë  ì °ë¥¼ ë «ë   í ´ë¡ ì  ë¥¼ ë§ ë  ë   í ¨ì  ì  ë  ë ¤ 
                   function makeOutListener(infowindow) {
                      return function() {
                         infowindow.close();
@@ -243,4 +223,3 @@
 
 </body>
 
-</html>
