@@ -23,7 +23,7 @@ public class NoticeDao2 {
 		
 	}
 	
-	public int insert(NoticeDto dto) {
+	public int insert(NoticeDto2 dto) {
 		int resultCount = 0;
 		
 		Connection con = null;
@@ -65,7 +65,7 @@ public class NoticeDao2 {
 	}
 	
 	
-	public int update(NoticeDto dto) {
+	public int update(NoticeDto2 dto) {
 		int resultCount = 0;
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -199,8 +199,8 @@ public class NoticeDao2 {
 		return list;
 	}
 	
-	public NoticeDto select(int num) {
-		NoticeDto dto = null;
+	public NoticeDto2 select(int num) {
+		NoticeDto2 dto = null;
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -229,7 +229,7 @@ public class NoticeDao2 {
 				String regdate = rs.getString(++index);
 				
 
-				dto = new NoticeDto(_num, writer, title, content, regdate);
+				dto = new NoticeDto2(_num, writer, title, content, regdate);
 			}
 
 		} catch (SQLException e1) {
@@ -251,28 +251,24 @@ public class NoticeDao2 {
 		}
 		return dto;
 	}
+	
 	public int getRows() {
-		int count = 0;
+		int count = 0 ;
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
 			con = ConnLocator.getConnect();
 			StringBuffer sql = new StringBuffer();
-			sql.append("SELECT COUNT(*) FROM notice ");
-			
+			sql.append("SELECT COUNT(*) FROM notice");
 			
 			pstmt = con.prepareStatement(sql.toString());
 			
 			int index = 0;
-			
-			
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
 				index = 0;
-				count= rs.getInt(++index);
-				
-				
+				count = rs.getInt(++index);
 			}
 			
 		} catch (SQLException e1) {
@@ -290,6 +286,41 @@ public class NoticeDao2 {
 			
 		}
 		return count;
+	}
+	public int getMaxNum() {
+		int max = 0 ;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = ConnLocator.getConnect();
+			StringBuffer sql = new StringBuffer();
+			sql.append("SELECT ifnull(MAX(n_num)+1,1) FROM notice");
+			
+			pstmt = con.prepareStatement(sql.toString());
+			
+			int index = 0;
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				index = 0;
+				max = rs.getInt(++index);
+			}
+			
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} finally {
+			try {
+				if(rs != null) rs.close();
+				if(pstmt != null) pstmt.close();
+				if(con != null) con.close();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+		}
+		return max;
 	}
 
 }

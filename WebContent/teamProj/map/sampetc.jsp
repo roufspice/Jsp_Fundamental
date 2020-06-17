@@ -4,11 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>kakaoMap</title>
+    <title>Look for the FAMARCY</title>
     <script type="text/javascript" src="../js/jquery-3.5.1.js"></script>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=39c6c1c8b379d7eb9472eff045d57c1b"></script>
        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     
+    <style>
+    body {
+    	background-image: url('../img/ryan.png');
+    	 background-repeat: no-repeat;
+    	 background-size: cover;
+    
+    }
+    
+    </style>
     <script>
     
    
@@ -23,82 +32,181 @@
                 },
                 success : function(xml){
                    const nameArr = [];
+                   const placeArr = [];
                    const latitudeArr =[];
                    const longitudeArr=[];
                    $(xml).find("item").each(function(){
                   let name = $(this).find("dutyName").text();
+                  let place = $(this).find("dutyMapimg").text();
                   let latitude = $(this).find("wgs84Lat").text();
                   let longitude = $(this).find("wgs84Lon").text();
                   nameArr.push(name);
+                  placeArr.push(place);
                   latitudeArr.push(latitude);
                   longitudeArr.push(longitude);
                   
                   
                    });
                  
-                   var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+                   var mapContainer = document.getElementById('map'), // Ã¬Â§Â Ã«Â Â Ã«Â¥Â¼ Ã Â Â Ã¬Â Â Ã Â Â  div 
                   mapOption = {
-                      center: new kakao.maps.LatLng(37.56682, 126.97864), // 지도의 중심좌표
-                      level: 7, // 지도의 확대 레벨
-                      mapTypeId : kakao.maps.MapTypeId.ROADMAP // 지도종류
+                      center: new kakao.maps.LatLng(37.56682, 126.97864), // Ã¬Â§Â Ã«Â Â Ã¬Â Â  Ã¬Â¤Â Ã¬Â Â¬Ã¬Â¢Â Ã Â Â 
+                      level: 7, // Ã¬Â§Â Ã«Â Â Ã¬Â Â  Ã Â Â Ã«Â Â  Ã«Â Â Ã«Â²Â¨
+                      mapTypeId : kakao.maps.MapTypeId.ROADMAP // Ã¬Â§Â Ã«Â Â Ã¬Â¢Â Ã«Â¥Â 
                   }; 
 
-                 // 지도를 생성한다 
+                 // Ã¬Â§Â Ã«Â Â Ã«Â¥Â¼ Ã¬Â Â Ã¬Â Â±Ã Â Â Ã«Â Â¤ 
                  var map = new kakao.maps.Map(mapContainer, mapOption); 
 
-                 // 지도 타입 변경 컨트롤을 생성한다
+                 // Ã¬Â§Â Ã«Â Â  Ã Â Â Ã¬Â Â  Ã«Â³Â ÃªÂ²Â½ Ã¬Â»Â¨Ã Â Â¸Ã«Â¡Â¤Ã¬Â Â  Ã¬Â Â Ã¬Â Â±Ã Â Â Ã«Â Â¤
                  var mapTypeControl = new kakao.maps.MapTypeControl();
    
-                 // 지도의 상단 우측에 지도 타입 변경 컨트롤을 추가한다
+                 // Ã¬Â§Â Ã«Â Â Ã¬Â Â  Ã¬Â Â Ã«Â Â¨ Ã¬Â Â°Ã¬Â¸Â¡Ã¬Â Â  Ã¬Â§Â Ã«Â Â  Ã Â Â Ã¬Â Â  Ã«Â³Â ÃªÂ²Â½ Ã¬Â»Â¨Ã Â Â¸Ã«Â¡Â¤Ã¬Â Â  Ã¬Â¶Â ÃªÂ°Â Ã Â Â Ã«Â Â¤
                  map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);   
    
-                 // 지도에 확대 축소 컨트롤을 생성한다
+                 // Ã¬Â§Â Ã«Â Â Ã¬Â Â  Ã Â Â Ã«Â Â  Ã¬Â¶Â Ã¬Â Â  Ã¬Â»Â¨Ã Â Â¸Ã«Â¡Â¤Ã¬Â Â  Ã¬Â Â Ã¬Â Â±Ã Â Â Ã«Â Â¤
                  var zoomControl = new kakao.maps.ZoomControl();
    
-                 // 지도의 우측에 확대 축소 컨트롤을 추가한다
+                 // Ã¬Â§Â Ã«Â Â Ã¬Â Â  Ã¬Â Â°Ã¬Â¸Â¡Ã¬Â Â  Ã Â Â Ã«Â Â  Ã¬Â¶Â Ã¬Â Â  Ã¬Â»Â¨Ã Â Â¸Ã«Â¡Â¤Ã¬Â Â  Ã¬Â¶Â ÃªÂ°Â Ã Â Â Ã«Â Â¤
                  map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT); 
                  
+
+                 if (navigator.geolocation) {
+                         
+                         // GeoLocationì   ì ´ì ©í ´ì   ì  ì   ì  ì¹ ë¥¼ ì »ì ´ì µë  ë ¤
+                         navigator.geolocation.getCurrentPosition(function(position) {
+                             
+                             var lat = position.coords.latitude, // ì  ë  
+                                 lon = position.coords.longitude; // ê²½ë  
+                             
+                             var locPosition = new kakao.maps.LatLng(lat, lon), // ë§ ì»¤ê°  í  ì  ë   ì  ì¹ ë¥¼ geolocationì ¼ë¡  ì »ì ´ì ¨ ì¢ í  ë¡  ì  ì ±í ©ë  ë ¤
+                                 message = '<div style="padding:5px;">You are here!!</div>'; // ì ¸í ¬ì  ë  ì °ì   í  ì  ë   ë ´ì ©ì  ë  ë ¤
+                             
+                             // ë§ ì»¤ì   ì ¸í ¬ì  ë  ì °ë¥¼ í  ì  í ©ë  ë ¤
+                             displayMarker(locPosition, message);
+                                 
+                           });
+                         
+                     } else { // HTML5ì   GeoLocationì   ì ¬ì ©í   ì   ì  ì  ë   ë§ ì»¤ í  ì   ì  ì¹ ì   ì ¸í ¬ì  ë  ì ° ë ´ì ©ì   ì ¤ì  í ©ë  ë ¤
+                         
+                         var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),    
+                             message = 'It is not work T.T'
+                             
+                         displayMarker(locPosition, message);
+                     }
+
+                     // ì§ ë  ì   ë§ ì»¤ì   ì ¸í ¬ì  ë  ì °ë¥¼ í  ì  í  ë   í ¨ì  ì  ë  ë ¤
+                     function displayMarker(locPosition, message) {
+
+                         // ë§ ì»¤ë¥¼ ì  ì ±í ©ë  ë ¤
+                         var marker = new kakao.maps.Marker({  
+                             map: map, 
+                             position: locPosition
+                         }); 
+                         
+                         var iwContent = message, // ì ¸í ¬ì  ë  ì °ì   í  ì  í   ë ´ì ©
+                             iwRemoveable = true;
+
+                         // ì ¸í ¬ì  ë  ì °ë¥¼ ì  ì ±í ©ë  ë ¤
+                         var infowindow = new kakao.maps.InfoWindow({
+                             content : iwContent,
+                             removable : iwRemoveable
+                         });
+                         
+                         // ì ¸í ¬ì  ë  ì °ë¥¼ ë§ ì»¤ì  ì   í  ì  í ©ë  ë ¤ 
+                         infowindow.open(map, marker);
+                         
+                         // ì§ ë   ì¤ ì ¬ì¢ í  ë¥¼ ì  ì  ì  ì¹ ë¡  ë³ ê²½í ©ë  ë ¤
+                         map.setCenter(locPosition);      
+                     }    
+                
                  
                  
-                         //content: '<div>근린공원</div>',
+                         //content: '<div>ÃªÂ·Â¼Ã«Â¦Â°ÃªÂ³ÂµÃ¬Â Â </div>',
                          //latlng: new kakao.maps.LatLng(33.451393, 126.570738)
                   
                  for (var i = 0; i < latitudeArr.length; i ++) {
-                	 var imageSrc = '../img/hospital.png', // 마커이미지의 주소입니다    
-						imageSize = new kakao.maps.Size(20, 20), // 마커이미지의 크기입니다
-						imageOption = {
-							offset : new kakao.maps.Point(27, 69)
-						}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-						var markerImage = new kakao.maps.MarkerImage(
-								imageSrc, imageSize, imageOption), markerPosition = new kakao.maps.LatLng(
-								latitudeArr[i], longitudeArr[i]); // 마커의 위치
-						// 마커를 생성합니다
-						var marker = new kakao.maps.Marker({
-							map : map, // 마커를 표시할 지도
-							position : markerPosition,
-							image : markerImage
-						});
+                    var imageSrc = '../img/hospital.png', // Ã«Â§Â Ã¬Â»Â¤Ã¬Â Â´Ã«Â¯Â¸Ã¬Â§Â Ã¬Â Â  Ã¬Â£Â¼Ã¬Â Â Ã¬Â Â Ã«Â Â Ã«Â Â¤    
+                  imageSize = new kakao.maps.Size(30, 30), // Ã«Â§Â Ã¬Â»Â¤Ã¬Â Â´Ã«Â¯Â¸Ã¬Â§Â Ã¬Â Â  Ã Â Â¬ÃªÂ¸Â°Ã¬Â Â Ã«Â Â Ã«Â Â¤
+                  imageOption = {
+                     offset : new kakao.maps.Point(10, 40)
+                  }; // Ã«Â§Â Ã¬Â»Â¤Ã¬Â Â´Ã«Â¯Â¸Ã¬Â§Â Ã¬Â Â  Ã¬Â ÂµÃ¬Â Â Ã¬Â Â Ã«Â Â Ã«Â Â¤. Ã«Â§Â Ã¬Â»Â¤Ã¬Â Â  Ã¬Â¢Â Ã Â Â Ã¬Â Â  Ã¬Â Â¼Ã¬Â¹Â Ã¬Â Â Ã Â Â¬ Ã¬Â Â´Ã«Â¯Â¸Ã¬Â§Â  Ã¬Â Â Ã¬Â Â Ã¬Â Â Ã¬Â Â  Ã¬Â¢Â Ã Â Â Ã«Â¥Â¼ Ã¬Â Â¤Ã¬Â Â Ã Â Â©Ã«Â Â Ã«Â Â¤.
+                  var markerImage = new kakao.maps.MarkerImage(
+                        imageSrc, imageSize, imageOption), markerPosition = new kakao.maps.LatLng(
+                        latitudeArr[i], longitudeArr[i]); // Ã«Â§Â Ã¬Â»Â¤Ã¬Â Â  Ã¬Â Â Ã¬Â¹Â 
+                  // Ã«Â§Â Ã¬Â»Â¤Ã«Â¥Â¼ Ã¬Â Â Ã¬Â Â±Ã Â Â©Ã«Â Â Ã«Â Â¤
+                  var marker = new kakao.maps.Marker({
+                     map : map, // Ã«Â§Â Ã¬Â»Â¤Ã«Â¥Â¼ Ã Â Â Ã¬Â Â Ã Â Â  Ã¬Â§Â Ã«Â Â 
+                     position : markerPosition,
+                     image : markerImage
+                  });
 
-                     // 마커에 표시할 인포윈도우를 생성합니다 
+                     // Ã«Â§Â Ã¬Â»Â¤Ã¬Â Â  Ã Â Â Ã¬Â Â Ã Â Â  Ã¬Â Â¸Ã Â Â¬Ã¬Â Â Ã«Â Â Ã¬Â Â°Ã«Â¥Â¼ Ã¬Â Â Ã¬Â Â±Ã Â Â©Ã«Â Â Ã«Â Â¤ 
                      var infowindow = new kakao.maps.InfoWindow({
-                         content: '<div>'+nameArr[i]+'</div>' // 인포윈도우에 표시할 내용
+                         content: '<div>'+nameArr[i]+'</div>' // Ã¬Â Â¸Ã Â Â¬Ã¬Â Â Ã«Â Â Ã¬Â Â°Ã¬Â Â  Ã Â Â Ã¬Â Â Ã Â Â  Ã«Â Â´Ã¬Â Â©
                      });
 
-                     // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
-                     // 이벤트 리스너로는 클로저를 만들어 등록합니다 
-                     // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+                     
+                   //console.log(addrArr[i]);
+                  
+               var arrayObj = nameArr[i].split(' ');
+               var addr = "";
+               for(var k=0;k<arrayObj.length;k++){
+                  if(k==3){
+                     addr +=arrayObj[k] +"<br>";
+                  }else{
+                     addr +=arrayObj[k]+" "; 
+                  }
+                  
+               }
+               // ë§ ì»¤ì   í  ì  í   ì ¸í ¬ì  ë  ì °ë¥¼ ì  ì ±í ©ë  ë ¤ 
+               var infowindow = new kakao.maps.InfoWindow({
+                  content : '<div class="area">'   
+                            + '<div class="info" style="font-weight: bolder;  text-align: center; background-color:#BEF781;">'
+                            + '<div class="title" style ="color: black; font:bolder;">'
+                            + addr
+                            + '</div>'
+                            + '<div class ="body" style="width: 220px; margin: 0 0 5px 0; text-align: center; background-color:white; ">'
+                            + '<div class="addr" style="font-size:10px;">'
+                            + placeArr[i]
+                            + '</div>'
+                            + '</div>' + '</div>'
+                            + '</div>'
+                     
+                     
+               });
+                    
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     // Ã«Â§Â Ã¬Â»Â¤Ã¬Â Â  mouseover Ã¬Â Â´Ã«Â²Â¤Ã Â Â¸Ã¬Â Â  mouseout Ã¬Â Â´Ã«Â²Â¤Ã Â Â¸Ã«Â¥Â¼ Ã«Â Â±Ã«Â¡Â Ã Â Â©Ã«Â Â Ã«Â Â¤
+                     // Ã¬Â Â´Ã«Â²Â¤Ã Â Â¸ Ã«Â¦Â¬Ã¬Â Â¤Ã«Â Â Ã«Â¡Â Ã«Â Â  Ã Â Â´Ã«Â¡Â Ã¬Â Â Ã«Â¥Â¼ Ã«Â§Â Ã«Â Â¤Ã¬Â Â´ Ã«Â Â±Ã«Â¡Â Ã Â Â©Ã«Â Â Ã«Â Â¤ 
+                     // forÃ«Â¬Â¸Ã¬Â Â Ã¬Â Â  Ã Â Â´Ã«Â¡Â Ã¬Â Â Ã«Â¥Â¼ Ã«Â§Â Ã«Â Â¤Ã¬Â Â´ Ã¬Â£Â¼Ã¬Â§Â  Ã¬Â Â Ã¬Â Â¼Ã«Â©Â´ Ã«Â§Â Ã¬Â§Â Ã«Â§Â  Ã«Â§Â Ã¬Â»Â¤Ã¬Â Â Ã«Â§Â  Ã¬Â Â´Ã«Â²Â¤Ã Â Â¸ÃªÂ°Â  Ã«Â Â±Ã«Â¡Â Ã«Â Â©Ã«Â Â Ã«Â Â¤
                      kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
                      kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
                  }
 
-                 // 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
+                 // Ã¬Â Â¸Ã Â Â¬Ã¬Â Â Ã«Â Â Ã¬Â Â°Ã«Â¥Â¼ Ã Â Â Ã¬Â Â Ã Â Â Ã«Â Â  Ã Â Â´Ã«Â¡Â Ã¬Â Â Ã«Â¥Â¼ Ã«Â§Â Ã«Â Â Ã«Â Â  Ã Â Â¨Ã¬Â Â Ã¬Â Â Ã«Â Â Ã«Â Â¤ 
                  function makeOverListener(map, marker, infowindow) {
                      return function() {
                          infowindow.open(map, marker);
                      };
                  }
 
-                 // 인포윈도우를 닫는 클로저를 만드는 함수입니다 
+                 // Ã¬Â Â¸Ã Â Â¬Ã¬Â Â Ã«Â Â Ã¬Â Â°Ã«Â¥Â¼ Ã«Â Â«Ã«Â Â  Ã Â Â´Ã«Â¡Â Ã¬Â Â Ã«Â¥Â¼ Ã«Â§Â Ã«Â Â Ã«Â Â  Ã Â Â¨Ã¬Â Â Ã¬Â Â Ã«Â Â Ã«Â Â¤ 
                  function makeOutListener(infowindow) {
                      return function() {
                          infowindow.close();
@@ -118,20 +226,30 @@
 
     </script>
     </head>
-    <body>
-    <nav aria-label="Page navigation example">
-    				  <ul class="pagination justify-content-center">
-    				    <li class="page-item disabled">
-    				    </li>
-    		       <button type="button" class="btn btn-outline-info" onclick="location='../main.jsp'">Home</button>
-			<button type="button" class="btn btn-outline-danger" onclick="location='sampfire.jsp'">fire</button>
-			<button type="button" class="btn btn-outline-warning" onclick="location='sampAED.jsp'">AED</button>
-			<button type="button" class="btn btn-outline-success" >etc</button>
-			<li class="page-item"></li>
-    				  </ul>
-    				</nav>
-        <div id="map" style="width:100%;height:100vh;"></div>
-        <div id="sel"></div>
-        
-    </body>
-    </html>
+   <body>
+
+<div style="position: absolute;">
+
+<div style = "position:relative; z-index:2; left: 10px; top: 10px;">
+<div class="btn-group-vertical">
+
+			<button type="button" class="btn btn-info" onclick="location='../main.jsp'">HOME</button>
+			<button type="button" class="btn btn-danger" onclick="location='sampfire.jsp'">FIRE STATION</button>
+			<button type="button" class="btn btn-warning" onclick="location='sampAED.jsp'">AED</button>
+			<button type="button" class="btn btn-success" onclick="">EMERGENCY</button>
+		  
+</div>
+</div>
+</div>
+<div style = "position:relative;z-index:1;">
+    <div class="container">
+    <div class="row">
+    <div class="col-12" id="upper" style="background-color:#28A745; width:100%;height:8vh;">
+    <div id="upperText" style ="float:right; color: white;">Built and Designed by PARK.JOO-HYEOK, YANG.IN-KI, LEE.SANG-HYO, HA.DAE-YOUN</div></div>
+    </div>
+     <div class="row">
+    <div class = "col-12" id="map" style="width:100%;height:93vh;"></div>
+    </div>
+</body>
+
+</html>

@@ -11,10 +11,7 @@
     
     <style>
     body {
-    	 
-    	 background-image: url('img/ryan.png');
-    	 background-repeat: no-repeat;
-    	 background-size: cover;
+    	 background-color:#17a2b8;
     
     
     }
@@ -160,13 +157,15 @@
     <div style = "position:relative;z-index:1;">
     <div class="container">
     <div class="row">
-    <div class="col-12" id="upper" style="background-color:#17A2B8; width:100%;height:8vh;">
-    <div id="upperText" style ="float:right; color: white;">Built and Designed by PARK.JOO-HYEOK, YANG.IN-KI, LEE.SANG-HYO, HA.DAE-YOUN</div></div>
+    <div class="col-12" id="upper" style="background-color:white; width:100%;height:2vh;">
+    <div id="upperText">HELLO</div></div>
     </div>
      <div class="row">
-    <div class = "col-12" id="map" style="width:100%;height:93vh;"></div>
+    <div class = "col-12" id="map" style="width:100%;height:96vh;"></div>
     </div>
-    
+    <div class="row">
+    <div class="col-12" id="upper" style="background-color:white; width:100%;height:2vh;"></div>
+    </div>
   
     
     </div>
