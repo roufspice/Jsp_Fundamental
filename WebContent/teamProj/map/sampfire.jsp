@@ -31,8 +31,8 @@
 <script>
    $(function() {
 
-      $
-            .ajax({
+      
+      $.ajax({
                url : '../xml/fireStation.xml',
                type : 'GET',
                dataType : 'xml',
@@ -69,69 +69,268 @@
                      level : 7,
                      mapTypeId : kakao.maps.MapTypeId.ROADMAP
                   };
+                  var drawingFlag = false;
+                  var moveLine;
+                  var clickLine;
+                  var distanceOverlay;
+                  var dots ={};
+
 
                   var map = new kakao.maps.Map(mapContainer, mapOption);
                   
-                   if (navigator.geolocation) {
+                  if (navigator.geolocation) {
                            
-                           // GeoLocation을 이용해서 접속 위치를 얻어옵니다
-                           navigator.geolocation.getCurrentPosition(function(position) {
+                     // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+                     navigator.geolocation.getCurrentPosition(function(position) {
                                
-                               var lat = position.coords.latitude, // 위도
-                                   lon = position.coords.longitude; // 경도
+                        var lat = position.coords.latitude, // 위도
+                            lon = position.coords.longitude; // 경도
                                
-                               var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
-                                   message = '<div style="padding:5px;">내 위치!</div>'; // 인포윈도우에 표시될 내용입니다
+                        var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
+                            message = '<div style="padding:5px;">내 위치!</div>'; // 인포윈도우에 표시될 내용입니다
                                
-                               // 마커와 인포윈도우를 표시합니다
-                               displayMarker(locPosition, message);
+                     // 마커와 인포윈도우를 표시합니다
+                        displayMarker(locPosition, message);
                                    
-                             });
+                     });
                            
-                       } else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
+                  } else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
                            
-                           var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),    
-                               message = 'It is not work T.T'
+                     var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),    
+                         message = 'It is not work T.T'
                                
-                           displayMarker(locPosition, message);
-                       }
+                     displayMarker(locPosition, message);
+                  }
 
-                       // 지도에 마커와 인포윈도우를 표시하는 함수입니다
-                       function displayMarker(locPosition, message) {
+                  // 지도에 마커와 인포윈도우를 표시하는 함수입니다
+                  function displayMarker(locPosition, message) {
 
-                           // 마커를 생성합니다
-                           var marker = new kakao.maps.Marker({  
-                               map: map, 
-                               position: locPosition
-                           }); 
+                  // 마커를 생성합니다
+                     var marker = new kakao.maps.Marker({  
+                        map: map, 
+                        position: locPosition
+                     }); 
                            
-                           var iwContent = message, // 인포윈도우에 표시할 내용
-                               iwRemoveable = true;
+                     var iwContent = message, // 인포윈도우에 표시할 내용
+                         iwRemoveable = true;
 
-                           // 인포윈도우를 생성합니다
-                           var infowindow = new kakao.maps.InfoWindow({
-                               content : iwContent,
-                               removable : iwRemoveable
-                           });
+                     // 인포윈도우를 생성합니다
+                     var infowindow = new kakao.maps.InfoWindow({
+                         content : iwContent,
+                         removable : iwRemoveable
+                     });
                            
-                           // 인포윈도우를 마커위에 표시합니다 
-                           infowindow.open(map, marker);
+                     // 인포윈도우를 마커위에 표시합니다 
+                     infowindow.open(map, marker);
                            
                            // 지도 중심좌표를 접속위치로 변경합니다
-                           map.setCenter(locPosition);      
-                       }    
+                     map.setCenter(locPosition);      
+                  } 
+
+                  //추가 함수
+                  kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+
+                     var clickPosition= mouseEvent.latLng;
+
+                  //테스트
+                     if (!drawingFlag){
+                        drawingFlag = true;
+                        deleteClickLine();
+                        deleteDistnce();
+                        deleteCircleDot();
+                        clickLine = new kakao.maps.Polyline({
+                           map: map,
+                           path : [clickPosition],
+                           //선 디자인 편집(두께,색,투명도,스타일)
+                           strokeWeight : 3,
+                           strokeColor : '#db4040',
+                           strokeOpacity : 0.8,
+                           strokeStyle: 'solid'
+                        });
+                        moveLine = new kakao.maps.Polyline({
+                           strokeWeight : 3,
+                           strokeColor : '#db4040',
+                           strokeOpacity : 1,
+                           strokeStyle: 'solid'
+
+                        });
+
+                        displayCircleDot(clickPosition, 0);
+                     }else {
+                        var path = clickLine.getPath();
+                        path.push(clickPosition);
+                        clickLine.setPath(path);
+                        
+                        var distance = Math.round(clickLine.getLength());
+                        displayCircleDot(clickPosition, distance);
+
+
+                     }
+                  });
+
+                  kakao.maps.event.addListener(map, 'mousemove', function(mouseEvent) {
+
+                     if (drawingFlag) {
+                        var mousePosition = mouseEvent.latLng;
+                        var path = clickLine.getPath();
+
+                        var movepath = [ path[path.length - 1], mousePosition ];
+                        moveLine.setPath(movepath);
+                        moveLine.setMap(map);
+
+                        var distance = Math.round(clickLine.getLength() + moveLine.getLength()),
+                        content = '<div class="dotOverlay distanceInfo">총거리 <span class="number">' + distance + '</span>m</div>';
+
+                        showDistance(content, mousePosition);
+                     }
+
+                     });
+
+                  kakao.maps.event.addListener(map, 'rightclick', function(mouseEvent) {
+
+                     if(drawingFlag) {
+                        moveLine.setMap(null);
+                        moveLine =null;
+
+                        var path = clickLine.getPath();
+
+                        if(path.length >1){
+                           if (dots[dots.length - 1].distance){
+                                 dots[dots.length -1].distance.setMap(null);
+                                 dots[dots.length -1].distance = null;
+
+                           }
+                           //선의 거리 계산
+                           var distance = Math.round(clickLine.getLength()),
+                           content = getTimeHTML(distance);
+
+                           showDistance(content, path[path.length -1]);
+
+                        } else{
+
+                           deleteClickLine();
+                           deleteCircleDot();
+                           deleteDistnce();
+
+                        }
+
+                        drawingFlag = false;
+
+                     }
+                     });
+                  function deleteClickLine() {
+                     if (clickLine) {
+                     clickLine.setMap(null);
+                     clickLine = null;
+                     }
+                     }
+
+                  //function showDistance(){}
+                  function showDistance(content, position) {
+
+                     if(distanceOverlay) {
+                        distanceOverlay.setPosition(position);
+                     distanceOverlay.setContent(content);
+                     } else {
+                        distanceOverlay = new kakao.maps.CustomOverlay({
+                           map : map,
+                           content : content,
+                           position : position,
+                           xAnchor : 0,
+                           yAnchor : 0,
+                           zIndex : 3
+                        });
+                     }
+                  }
+
+                  function deleteDistnce(){
+                     if (distanceOverlay) {
+                     distanceOverlay.setMap(null);
+                     distanceOverlay = null;
+                     }
+                  }
+
+                  //function displayCircleDot(){}
+                  function displayCircleDot(position, distance) {
+                     var circleOverlay = new kakao.maps.CustomOverlay({
+                     content : '<span class="dot"></span>',
+                     position : position,
+                     zIndex : 1
+                     });
+
+                     circleOverlay.setMap(map);
+
+                     if (distance > 0) {
+                        var distanceOverlay = new kakao.maps.CustomOverlay({
+                           content : '<div class="dotOverlay">거리 <span class="number">'
+                                       + distance + '</span>m</div>',
+                           position : position,
+                           yAnchor : 1,
+                           zIndex : 2
+                        });
+
+                        distanceOverlay.setMap(map);
+
+                     }
+
+                     dots.push({
+                        circle : circleOverlay,
+                        distance : distanceOverlay
+                     });
+                     }
+                     //function deleteCircleDot(){}
+
+                  function deleteCircleDot(){
+                     let i;
+
+                     for(i =0; i< dots.length; i++) {
+                        if (dots[i].circle) {
+                           dots[i].circle.setMap(null);
+                        }
+
+                        if (dots[i].distance) {
+                           dots[i].distance.setMap(null);
+                        }
+                     }
+
+                     dots = [];
+                     }
+
+                  function getTimeHTML(distance) {
+
+                     var walkTime = distance / 67 | 0;
+                     var walkHour = '', walkMin = '';
+
+                     if (walkTime > 60) {
+                        walkHour = '<span class="number">' + Math.floor(walkTime / 60) + '</span>시간 '
+
+                     }
+                     walkMin = '<span class="number">' + walkTime % 60 + '</span>분'
+
+                     var content = '<ul class="dotOverlay distanceInfo">';
+
+                     content += '    <li>';
+                     content += '        <span class="label">총거리</span><span class="number">' + distance + '</span>m';
+                     content += '    </li>';
+                     content += '    <li>';
+                     content += '        <span class="label">도보</span>' + walkHour + walkMin;
+                     content += '    </li>';
+                     content += '    </ul>'
+
+                     return content;
+                     }
+
+
                   
                   
 
                   var mapTypeControl = new kakao.maps.MapTypeControl();
 
-                  map.addControl(mapTypeControl,
-                        kakao.maps.ControlPosition.TOPRIGHT);
+                  map.addControl(mapTypeControl,kakao.maps.ControlPosition.TOPRIGHT);
 
                   var zoomControl = new kakao.maps.ZoomControl();
 
-                  map.addControl(zoomControl,
-                        kakao.maps.ControlPosition.RIGHT);
+                  map.addControl(zoomControl,kakao.maps.ControlPosition.RIGHT);
 
                   for (let i = 0; i < latitudeArr.length; i++) {
                      var imageSrc = '../img/rescue119.png',
@@ -139,17 +338,15 @@
                      imageOption = {
                         offset : new kakao.maps.Point(15, 40)
                      };
-                     var markerImage = new kakao.maps.MarkerImage(
-                           imageSrc, imageSize, imageOption), markerPosition = new kakao.maps.LatLng(
-                           latitudeArr[i], longitudeArr[i]);
-                     var marker = new kakao.maps.Marker({
+                  var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption), 
+                      markerPosition = new kakao.maps.LatLng(latitudeArr[i], longitudeArr[i]);
+                  var marker = new kakao.maps.Marker({
                         map : map,
                         position : markerPosition,
                         image : markerImage
-                     });
+                  });
 
-                     var infowindow = new kakao.maps.InfoWindow(
-                           {
+                  var infowindow = new kakao.maps.InfoWindow({
                               content : '<div class="area">'   
                                     + '<div class="info" style="font-weight: bolder;  text-align: center; background-color:#ff7733;">'
                                     + '<div class="title" style ="color: black; font:bolder;">'
@@ -166,10 +363,8 @@
 
                            });
 
-                     kakao.maps.event.addListener(marker, 'mouseover',
-                           makeOverListener(map, marker, infowindow));
-                     kakao.maps.event.addListener(marker, 'mouseout',
-                           makeOutListener(infowindow));
+                  kakao.maps.event.addListener(marker, 'mouseover',makeOverListener(map, marker, infowindow));
+                  kakao.maps.event.addListener(marker, 'mouseout',makeOutListener(infowindow));
                   }
 
                   function makeOverListener(map, marker, infowindow) {
