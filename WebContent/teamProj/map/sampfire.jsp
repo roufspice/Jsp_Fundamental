@@ -25,6 +25,11 @@
     
     
     }
+    .dotOverlay {position:relative;bottom:10px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;font-size:12px;padding:5px;background:#ffffff;}
+	.dotOverlay:after {content:'';position:absolute;margin-left:-6px;left:50%;bottom:-8px;width:11px;height:8px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white_small.png')}
+	.distanceInfo {position:relative;top:5px;left:5px;list-style:none;margin:0;}
+	.number {font-weight:bold;color:#ee6152;} 
+	.distanceInfo .label {display:inline-block;width:50px; font-weight:bold; color: black;}
     
     </style>
 
@@ -66,7 +71,7 @@
                   var mapContainer = document.getElementById('map'),
                   mapOption = {
                      center : new kakao.maps.LatLng(37.56682, 126.97864),
-                     level : 7,
+                     level : 3,
                      mapTypeId : kakao.maps.MapTypeId.ROADMAP
                   };
                   var drawingFlag = false;
@@ -87,7 +92,7 @@
                             lon = position.coords.longitude; // 경도
                                
                         var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
-                            message = '<div style="padding:5px;">내 위치!</div>'; // 인포윈도우에 표시될 내용입니다
+                        message = '<div style="padding:5px;"><span>내 위치!<div></span><p style="font-size:9px; font-weight:bolder; color:red; margin :0;">마우스 왼쪽버튼 을 클릭해보세요</p><p style="font-size:9px;font-weight:bolder; color:red; margin :0;">거리/시간을 알려줍니다!</p></div></div>';
                                
                      // 마커와 인포윈도우를 표시합니다
                         displayMarker(locPosition, message);
@@ -262,7 +267,7 @@
 
                      if (distance > 0) {
                         var distanceOverlay = new kakao.maps.CustomOverlay({
-                           content : '<div class="dotOverlay">거리 <span class="number">'
+                           content : '<div class="dotOverlay">직선거리 <span class="number">'
                                        + distance + '</span>m</div>',
                            position : position,
                            yAnchor : 1,
@@ -407,6 +412,8 @@
     <div class="container">
     <div class="row">
     <div class="col-12" id="upper" style="background-color:#DC3545; width:100%;height:8vh;">
+    <span id="title" style ="color: white; font-weight: bolder; font-size: 18px; padding: 0 0 0 20px; margin:10px 0 0 0;">나만의응급지도</span>
+ 
     <div id="upperText" style ="float:right; color: white;">Built and Designed by PARK.JOO-HYEOK, YANG.IN-KI, LEE.SANG-HYO, HA.DAE-YOUN</div></div>
     </div>
      <div class="row">

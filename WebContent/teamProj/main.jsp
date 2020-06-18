@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>서비스에 오신걸 환영합니다</title>
+    <title>나만의 응급지도에 오신걸 환영합니다</title>
     <script type="text/javascript" src="../js/jquery-3.5.1.js"></script>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=39c6c1c8b379d7eb9472eff045d57c1b"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
@@ -16,15 +16,22 @@
     	 background-image: url('img/ryan.png');
     	 background-repeat: no-repeat;
     	 background-size: cover;
-    
+    	 
+    	 
     
     }
+    .dotOverlay {position:relative;bottom:10px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;font-size:12px;padding:5px;background:#ffffff;}
+	.dotOverlay:after {content:'';position:absolute;margin-left:-6px;left:50%;bottom:-8px;width:11px;height:8px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white_small.png')}
+	.distanceInfo {position:relative;top:5px;left:5px;list-style:none;margin:0;}
+	.number {font-weight:bold;color:#ee6152;} 
+	.distanceInfo .label {display:inline-block;width:50px; font-weight:bold; color: black;}
+    
     
     </style>
     
 <script>
     
-
+	
     var scrt_var = 10; 
     $(function(){
             $.ajax({
@@ -63,23 +70,36 @@
                     if (navigator.geolocation) {
                          
                         navigator.geolocation.getCurrentPosition(function(position) {
+                        	
                              
                             var lat = position.coords.latitude,
 
                                 lon = position.coords.longitude;
-                             
+                            
+                            console.log(lat);
+                            
+                            console.log(lon);
                             var locPosition = new kakao.maps.LatLng(lat, lon),
-                                message = '<div style="padding:5px;">내 위치!</div>';
+                            message = '<div style="padding:5px;"><span>내 위치!<div></span><p style="font-size:9px; font-weight:bolder; color:red; margin :0;">마우스 왼쪽버튼 을 클릭해보세요</p><p style="font-size:9px;font-weight:bolder; color:red; margin :0;">거리/시간을 알려줍니다!</p></div></div>';
+                            
                              
 
                             displayMarker(locPosition, message);
                                  
-                        });
+                        }, function(error) {
+                            console.log('Error occurred. Error code: ' + error.code);
+                            // error.code can be:
+                            //   0: unknown error
+                            //   1: permission denied
+                            //   2: position unavailable (error response from location provider)
+                            //   3: timed out
+                          });
                          
                     } else {
                          
                         var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),    
                             message = 'It is not work T.T'
+                            console.log(message);
                              
                         displayMarker(locPosition, message);
                     }
@@ -241,7 +261,7 @@
 
                         if (distance > 0) {
                             var distanceOverlay = new kakao.maps.CustomOverlay({
-                                content : '<div class="dotOverlay">거리 <span class="number">'
+                                content : '<div class="dotOverlay">직선거리 <span class="number">'
                                             + distance + '</span>m</div>',
                                 position : position,
                                 yAnchor : 1,
@@ -346,6 +366,7 @@
     <div class="container">
     <div class="row">
     <div class="col-12" id="upper" style="background-color:#17A2B8; width:100%;height:8vh;">
+    <span id="title"style ="color: white; font-weight: bolder; font-size: 18px; padding: 0 0 0 20px; margin:10px 0 0 0;">나만의응급지도</span>
     <div id="upperText" style ="float:right; color: white;">Built and Designed by PARK.JOO-HYEOK, YANG.IN-KI, LEE.SANG-HYO, HA.DAE-YOUN</div></div>
     </div>
      <div class="row">

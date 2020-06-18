@@ -1,3 +1,5 @@
+<%@page import="kr.or.kpc.dto.CustomerDto"%>
+<%@page import="kr.or.kpc.dto.MemberDto"%>
 <%@ page language="java" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,21 +26,40 @@
 	    <span class="navbar-toggler-icon"></span>
 	  </button>
 	  <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-	    <a class="navbar-brand" href="#">Hidden brand</a>
 	    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 	      <li class="nav-item active">
-	        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+	        <a class="nav-link" href="#">홈 <span class="sr-only">(current)</span></a>
 	      </li>
 	      <li class="nav-item">
-	        <a class="nav-link" href="#">Link</a>
+	        <a class="nav-link" href="/notice/list.jsp">공지사항</a>
 	      </li>
-	      <li class="nav-item">
-	        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-	      </li>
+	      
 	    </ul>
-	    <form class="form-inline my-2 my-lg-0">
-	      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-	      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-	    </form>
+	    
+	    <div class="form-inline my-2 my-lg-0">
+	      	<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+	      	<%
+	      		CustomerDto customerDto = (CustomerDto)session.getAttribute("login");
+	      		if(customerDto != null){
+	      	%>
+		      <li class="nav-item active">
+		        <a class="nav-link">
+		        	<strong style="color:white;"><%=customerDto.getName() %></strong>님
+		        </a>
+		      </li>
+		      <li class="nav-item">
+		        <a class="nav-link" href="/member/logout.jsp">[로그아웃]</a>
+		      </li>
+		      <li class="nav-item">
+		        <a class="nav-link" href="/member/mypage_pwd.jsp">[마이페이지]</a>
+		      </li>
+	    	<%}else{ %>
+	    		<li class="nav-item">
+		        	<a class="nav-link" href="/member/login.jsp">로그인</a>
+		      	</li>
+	    	<%} %>
+	    	</ul>
+	    </div>
+	   	
 	  </div>
 	</nav>
