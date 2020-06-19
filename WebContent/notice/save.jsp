@@ -1,8 +1,6 @@
 <%@page import="kr.or.kpc.dto.NoticeDto2"%>
 <%@page import="kr.or.kpc.dao.NoticeDao2"%>
 <%@ page import="kr.or.kpc.dto.CustomerDto"%>
-<%@ page import="kr.or.kpc.dto.NoticeDto"%>
-<%@ page import="kr.or.kpc.dao.NoticeDao"%>
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%
 	CustomerDto customerDto = (CustomerDto)session.getAttribute("login");

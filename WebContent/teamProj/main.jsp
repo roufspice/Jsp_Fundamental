@@ -20,6 +20,8 @@
     	 
     
     }
+    #지도상 최종거리 및 좌표거리 스타일 코드입니다.
+    
     .dotOverlay {position:relative;bottom:10px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;font-size:12px;padding:5px;background:#ffffff;}
 	.dotOverlay:after {content:'';position:absolute;margin-left:-6px;left:50%;bottom:-8px;width:11px;height:8px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white_small.png')}
 	.distanceInfo {position:relative;top:5px;left:5px;list-style:none;margin:0;}
@@ -59,14 +61,18 @@
                       level : 4,
                       mapTypeId : kakao.maps.MapTypeId.ROADMAP
                     }; 
-                    var drawingFlag = false;
+                   
+                    var drawingFlag = false;	
                     var moveLine;
                     var clickLine;
                     var distanceOverlay;
                     var dots ={};
-
+					
+                    <!--카카오 API-->
                     var map = new kakao.maps.Map(mapContainer, mapOption); 
-
+					
+                    <!--카카오API 현재위치 함수 -->
+                  
                     if (navigator.geolocation) {
                          
                         navigator.geolocation.getCurrentPosition(function(position) {
@@ -80,7 +86,8 @@
                             
                             console.log(lon);
                             var locPosition = new kakao.maps.LatLng(lat, lon),
-                            message = '<div style="padding:5px;"><span>내 위치!<div></span><p style="font-size:9px; font-weight:bolder; color:red; margin :0;">마우스 왼쪽버튼 을 클릭해보세요</p><p style="font-size:9px;font-weight:bolder; color:red; margin :0;">거리/시간을 알려줍니다!</p></div></div>';
+                            message = 
+                            	'<div style="padding:5px;"><span>내 위치!<div></span><p style="font-size:9px; font-weight:bolder; color:red; margin :0;">마우스 왼쪽버튼 을 클릭해보세요</p><p style="font-size:9px;font-weight:bolder; color:red; margin :0;">거리/시간을 알려줍니다!</p></div></div>';
                             
                              
 
@@ -103,7 +110,8 @@
                              
                         displayMarker(locPosition, message);
                     }
-
+					
+                   
                     function displayMarker(locPosition, message) {
 
                         var marker = new kakao.maps.Marker({  
@@ -125,8 +133,8 @@
                     }    
                 
                  
-                
-                    //추가 함수
+                	
+                    <!--지도상에서 마커찍기 카카오맵 공공API 마우스 왼쪽클릭=>이벤트발생 -->
                     kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
 
                         var clickPosition= mouseEvent.latLng;
@@ -166,7 +174,7 @@
 
                         }
                     });
-
+                    <!--지도상에서 마커찍기 카카오맵 공공API 마우스 드래그=>이벤트발생 -->
                     kakao.maps.event.addListener(map, 'mousemove', function(mouseEvent) {
 
                         if (drawingFlag) {
@@ -184,7 +192,7 @@
                         }
 
                     });
-
+                    <!--지도상에서 마커제거 함수  마우스 오른쪽버튼=>이벤트발생 -->
                     kakao.maps.event.addListener(map, 'rightclick', function(mouseEvent) {
 
                         if(drawingFlag) {
@@ -224,7 +232,7 @@
 		                }
 	                }
 
-                    //function showDistance(){}
+                    //function showDistance(){}지도상에 거리 보여주는 함수
                     function showDistance(content, position) {
 
                         if(distanceOverlay) {
@@ -319,12 +327,13 @@
                         return content;
                     } 
 
-
-
-
-                    var mapTypeControl = new kakao.maps.MapTypeControl();
+					<!--카카오맵 기타기능:  MapType, ControlPosition-->
+                     var mapTypeControl = new kakao.maps.MapTypeControl();
+                     
                      map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);   
+                     
                      var zoomControl = new kakao.maps.ZoomControl();
+                     
                      map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT); 
 
                     function makeOverListener(map, marker, infowindow) {

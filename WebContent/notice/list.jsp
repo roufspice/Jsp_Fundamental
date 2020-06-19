@@ -1,8 +1,6 @@
 <%@page import="kr.or.kpc.dto.NoticeDto2"%>
 <%@page import="kr.or.kpc.dao.NoticeDao2"%>
-<%@page import="kr.or.kpc.dto.NoticeDto"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="kr.or.kpc.dao.NoticeDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../inc/header.jsp"%>

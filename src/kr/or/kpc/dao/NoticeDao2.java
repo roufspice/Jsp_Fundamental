@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import kr.or.kpc.dto.NoticeDto;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import kr.or.kpc.dto.NoticeDto2;
 import kr.or.kpc.util.ConnLocator;
 
@@ -322,5 +324,88 @@ public class NoticeDao2 {
 		}
 		return max;
 	}
+	//Json만드는 원리!
+	public String selectJson(int start, int len) {
+		//미리 설계를 하고 가야함
+		/*
+		 * {
+		 * 	"items" :[
+		 * 			  {"n_num":1,"n_wirter":"작성자1","n_title":"제목1","n_regdate":"2020-06-19"},
+		 * 			  {"n_num":1,"n_wirter":"작성자1","n_title":"제목1","n_regdate":"2020-06-19"},
+		 * 			  {"n_num":1,"n_wirter":"작성자1","n_title":"제목1","n_regdate":"2020-06-19"},
+		 * 			  {"n_num":1,"n_wirter":"작성자1","n_title":"제목1","n_regdate":"2020-06-19"},
+		 * 			  {"n_num":1,"n_wirter":"작성자1","n_title":"제목1","n_regdate":"2020-06-19"},
+		 * 			  {"n_num":1,"n_wirter":"작성자1","n_title":"제목1","n_regdate":"2020-06-19"},
+		 * 			  {"n_num":1,"n_wirter":"작성자1","n_title":"제목1","n_regdate":"2020-06-19"},
+		 * 			
+		 * ]
+		 * 
+		 */
+		
+		
+		
+		JSONObject obj = new JSONObject();
+		JSONArray array = new JSONArray();
+					
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = ConnLocator.getConnect();
+			StringBuffer sql = new StringBuffer();
+			sql.append("SELECT n_num, n_writer, n_title, n_content, ");
+			sql.append("DATE_FORMAT(n_regdate,'%Y.%m.%d %h:%i') ");
+			sql.append("FROM notice ");
+			sql.append("ORDER BY n_num DESC ");
+			sql.append("LIMIT ? , ? ");
+			
 
+			pstmt = con.prepareStatement(sql.toString());
+
+			int index = 0;
+
+			pstmt.setInt(++index, start);
+			pstmt.setInt(++index, len);
+
+			rs = pstmt.executeQuery();
+			JSONObject obj1 = null;
+			while (rs.next()) {
+				index = 0;
+				int num = rs.getInt(++index);
+				String writer = rs.getString(index++);
+				String title = rs.getString(index++);
+				String content = rs.getString(index++);
+				String regdate = rs.getString(index++);
+				obj1 = new JSONObject();
+				obj1.put("num",num);
+				obj1.put("writer",writer);
+				obj1.put("title",title);
+				obj1.put("regdate",regdate);
+				array.add(obj1);
+				
+				
+			}
+			obj.put("items",array);
+			
+
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+		}
+		return obj.toJSONString();
+
+}
 }
