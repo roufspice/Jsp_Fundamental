@@ -174,7 +174,7 @@
 
                         }
                     });
-                    <!--지도상에서 마커찍기 카카오맵 공공API 마우스 드래그=>이벤트발생 -->
+                    <!--지도상에서 마커찍기 카카오맵 공공API 마우스 드래그이벤트발생 -->
                     kakao.maps.event.addListener(map, 'mousemove', function(mouseEvent) {
 
                         if (drawingFlag) {
