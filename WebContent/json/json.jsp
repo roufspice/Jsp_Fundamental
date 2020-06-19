@@ -6,12 +6,12 @@
 	//두가지 클래스! 사용
 	
 	JSONObject obj = new JSONObject();	//최종 완성될 JSONObject 선언(전체)
-	JSONArray array = new JSONArray(); // JSON정보를 담을 Array 선언
+	JSONArray array = new JSONArray();  // JSON정보를 담을 Array 선언
 	
 	JSONObject obj1 = new JSONObject();
 	obj1.put("no", "1");
 	obj1.put("storeName", "홈플러스1");
-	array.add(obj1);
+	array.add(obj1);				   //JSON에 담을 Array 선언 .add(obj1);
 	
 	JSONObject obj2 = new JSONObject();
 	obj2.put("no", "2");
