@@ -7,11 +7,11 @@
 <title>JSP Comment</title>
 </head>
 <body>
-	<!-- 보이냐? -->
+	<!-- 보이냐? 페이지소스보기로도 주석을 볼 수 있다! --> 
 	<%-- 안보이지 --%>
 	<%-- http://localhost/grammer/comment.jsp --%>
 	
-	<%
+	<%  //자바코드를 입력해도 보이지 않구나!
 		//a는 ??입니다.
 		int a = 10;
 	%>

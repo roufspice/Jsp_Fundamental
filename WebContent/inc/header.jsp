@@ -1,6 +1,3 @@
-<%@page import="kr.or.kpc.dto.CustomerDto"%>
-<%@page import="kr.or.kpc.dto.MemberDto"%>
-<%@ page language="java" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,9 +54,15 @@
 	    		<li class="nav-item">
 		        	<a class="nav-link" href="/member/login.jsp">로그인</a>
 		      	</li>
+		      	<li class="nav-item">
+		        	<a class="nav-link" href="/member/join.jsp">회원가입</a>
+		      	</li>
 	    	<%} %>
 	    	</ul>
 	    </div>
 	   	
 	  </div>
 	</nav>
+<%@page import="kr.or.kpc.dto.CustomerDto"%>
+<%@page import="kr.or.kpc.dto.MemberDto"%>
+<%@ page language="java" pageEncoding="UTF-8"%>

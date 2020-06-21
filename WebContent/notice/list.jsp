@@ -5,7 +5,7 @@
     pageEncoding="UTF-8"%>
 <%@ include file="../inc/header.jsp"%>
 <%
-	int displayCount = 3;
+	int displayCount = 3;//
 	int displayPageCount = 5;
 	String tempPage = request.getParameter("page");
 	int cPage = 0;
